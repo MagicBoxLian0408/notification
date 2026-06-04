@@ -8,22 +8,23 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import jakarta.annotation.PostConstruct;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Configuration
 public class FcmConfiguration {
 
-    @Value("${fcm.service-account-path}")
-    private String serviceAccountPath;
+    @Value("${fcm.service-account-json}")
+    private String serviceAccountJson;
 
     @PostConstruct
     public void initialize() throws IOException {
         if (!FirebaseApp.getApps().isEmpty()) {
             return;
         }
-        try (FileInputStream serviceAccount = new FileInputStream(serviceAccountPath)) {
+        try (ByteArrayInputStream serviceAccount = new ByteArrayInputStream(serviceAccountJson.getBytes(StandardCharsets.UTF_8))) {
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
