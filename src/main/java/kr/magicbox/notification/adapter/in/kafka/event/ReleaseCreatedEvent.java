@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 
 public record ReleaseCreatedEvent(
-        @JsonProperty("event_id") Long eventId,
         @JsonProperty("release_id") Long releaseId,
         @JsonProperty("creator_id") Long creatorId,
         @JsonProperty("title") String title,
