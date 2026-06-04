@@ -1,0 +1,16 @@
+package kr.magicbox.notification.adapter.in.kafka.event;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.Instant;
+
+public record DeliveryStartedEvent(
+        @JsonProperty("event_id") Long eventId,
+        @JsonProperty("order_id") Long orderId,
+        @JsonProperty("order_line_id") Long orderLineId,
+        @JsonProperty("customer_id") Long customerId,
+        @JsonProperty("carrier_code") String carrierCode,
+        @JsonProperty("tracking_number") String trackingNumber,
+        @JsonProperty("occurred_at") Instant occurredAt
+) implements InboxEvent {
+}
