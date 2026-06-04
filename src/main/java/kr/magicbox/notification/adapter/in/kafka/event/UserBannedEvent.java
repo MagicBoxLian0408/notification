@@ -8,8 +8,4 @@ public record UserBannedEvent(
         @JsonProperty("user_id") Long userId,
         @JsonProperty("occurred_at") Instant occurredAt
 ) implements InboxEvent {
-    @Override
-    public Long eventId() {
-        return userId;
-    }
 }
