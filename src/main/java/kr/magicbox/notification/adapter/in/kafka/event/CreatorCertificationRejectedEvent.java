@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 
 public record CreatorCertificationRejectedEvent(
-        @JsonProperty("event_id") Long eventId,
         @JsonProperty("user_id") Long userId,
         @JsonProperty("certification_id") Long certificationId,
         @JsonProperty("review_message") String reviewMessage,

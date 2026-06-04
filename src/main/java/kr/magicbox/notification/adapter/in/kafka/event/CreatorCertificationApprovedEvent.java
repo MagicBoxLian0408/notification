@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 
 public record CreatorCertificationApprovedEvent(
-        @JsonProperty("event_id") Long eventId,
         @JsonProperty("user_id") Long userId,
         @JsonProperty("certification_id") Long certificationId,
         @JsonProperty("occurred_at") Instant occurredAt

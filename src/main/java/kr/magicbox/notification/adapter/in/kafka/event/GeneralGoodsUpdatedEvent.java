@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 
 public record GeneralGoodsUpdatedEvent(
-        @JsonProperty("event_id") Long eventId,
         @JsonProperty("general_goods_id") Long generalGoodsId,
         @JsonProperty("creator_id") Long creatorId,
         @JsonProperty("occurred_at") Instant occurredAt

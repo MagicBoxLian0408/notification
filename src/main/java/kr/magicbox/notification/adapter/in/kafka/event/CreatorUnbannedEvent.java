@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 
 public record CreatorUnbannedEvent(
-        @JsonProperty("event_id") Long eventId,
         @JsonProperty("creator_id") Long creatorId,
         @JsonProperty("user_id") Long userId,
         @JsonProperty("occurred_at") Instant occurredAt
