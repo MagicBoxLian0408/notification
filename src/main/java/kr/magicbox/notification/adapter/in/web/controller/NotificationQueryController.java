@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/notification")
+
 @RequiredArgsConstructor
 public class NotificationQueryController {
 
