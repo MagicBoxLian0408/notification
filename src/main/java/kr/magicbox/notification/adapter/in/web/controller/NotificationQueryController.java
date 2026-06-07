@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-
 @RequiredArgsConstructor
 public class NotificationQueryController {
 
