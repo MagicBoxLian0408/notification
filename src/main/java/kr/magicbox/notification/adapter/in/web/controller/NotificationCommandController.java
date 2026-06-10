@@ -1,5 +1,6 @@
 package kr.magicbox.notification.adapter.in.web.controller;
 
+import kr.magicbox.notification.adapter.in.web.dto.request.ReadNotificationsRequest;
 import kr.magicbox.notification.adapter.in.web.dto.request.RegisterFcmTokenRequest;
 import kr.magicbox.notification.application.dto.command.ReadNotificationCommand;
 import kr.magicbox.notification.application.dto.command.RegisterFcmTokenCommand;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,11 +32,11 @@ public class NotificationCommandController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{notificationId}/read")
-    public ResponseEntity<Void> readNotification(
+    @PatchMapping("/read")
+    public ResponseEntity<Void> readNotifications(
             @AuthenticationPrincipal UserId userId,
-            @PathVariable Long notificationId) {
-        readNotificationUseCase.read(ReadNotificationCommand.of(notificationId, userId.value()));
+            @RequestBody ReadNotificationsRequest request) {
+        readNotificationUseCase.readAll(ReadNotificationCommand.of(request.notificationIds(), userId.value()));
         return ResponseEntity.noContent().build();
     }
 }
