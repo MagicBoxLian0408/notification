@@ -1,10 +1,12 @@
 package kr.magicbox.notification.application.dto.command;
 
+import java.util.List;
+
 public record ReadNotificationCommand(
-        Long notificationId,
+        List<Long> notificationIds,
         Long userId
 ) {
-    public static ReadNotificationCommand of(Long notificationId, Long userId) {
-        return new ReadNotificationCommand(notificationId, userId);
+    public static ReadNotificationCommand of(List<Long> notificationIds, Long userId) {
+        return new ReadNotificationCommand(notificationIds, userId);
     }
 }
