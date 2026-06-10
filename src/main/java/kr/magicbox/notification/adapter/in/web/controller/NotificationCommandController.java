@@ -8,6 +8,7 @@ import kr.magicbox.notification.application.port.in.ReadNotificationUseCase;
 import kr.magicbox.notification.application.port.in.RegisterFcmTokenUseCase;
 import kr.magicbox.notification.domain.vo.UserId;
 import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,7 +36,7 @@ public class NotificationCommandController {
     @PatchMapping("/read")
     public ResponseEntity<Void> readNotifications(
             @AuthenticationPrincipal UserId userId,
-            @RequestBody ReadNotificationsRequest request) {
+            @Valid @RequestBody ReadNotificationsRequest request) {
         readNotificationUseCase.readAll(ReadNotificationCommand.of(request.notificationIds(), userId.value()));
         return ResponseEntity.noContent().build();
     }
