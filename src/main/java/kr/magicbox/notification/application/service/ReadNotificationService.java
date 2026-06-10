@@ -3,7 +3,6 @@ package kr.magicbox.notification.application.service;
 import kr.magicbox.notification.application.dto.command.ReadNotificationCommand;
 import kr.magicbox.notification.application.port.in.ReadNotificationUseCase;
 import kr.magicbox.notification.application.port.out.NotificationRepositoryPort;
-import kr.magicbox.notification.domain.aggregate.Notification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +15,7 @@ public class ReadNotificationService implements ReadNotificationUseCase {
 
     @Transactional
     @Override
-    public void read(ReadNotificationCommand command) {
-        Notification notification = notificationRepositoryPort.findByIdAndUserId(
-                command.notificationId(), command.userId());
-        notification.markRead();
-        notificationRepositoryPort.update(notification);
+    public void readAll(ReadNotificationCommand command) {
+        notificationRepositoryPort.updateAllByIdsAndUserId(command.notificationIds(), command.userId());
     }
 }
