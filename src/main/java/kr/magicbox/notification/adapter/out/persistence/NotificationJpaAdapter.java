@@ -4,6 +4,7 @@ import kr.magicbox.notification.adapter.out.persistence.entity.NotificationEntit
 import kr.magicbox.notification.adapter.out.persistence.repository.NotificationJpaRepository;
 import kr.magicbox.notification.application.port.out.NotificationRepositoryPort;
 import kr.magicbox.notification.domain.aggregate.Notification;
+import kr.magicbox.notification.domain.exception.NotificationNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,21 @@ public class NotificationJpaAdapter implements NotificationRepositoryPort {
     @Override
     public void save(Notification notification) {
         notificationJpaRepository.save(NotificationEntity.from(notification));
+    }
+
+    @Override
+    public void update(Notification notification) {
+        NotificationEntity entity = notificationJpaRepository.findByIdAndUserId(
+                        notification.getId().value(), notification.getUserId().value())
+                .orElseThrow(NotificationNotFoundException::new);
+        entity.markRead();
+    }
+
+    @Override
+    public Notification findByIdAndUserId(Long notificationId, Long userId) {
+        return notificationJpaRepository.findByIdAndUserId(notificationId, userId)
+                .orElseThrow(NotificationNotFoundException::new)
+                .toDomain();
     }
 
     @Override
