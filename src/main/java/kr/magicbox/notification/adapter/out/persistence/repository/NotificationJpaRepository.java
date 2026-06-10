@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface NotificationJpaRepository extends JpaRepository<NotificationEntity, Long> {
     List<NotificationEntity> findAllByUserIdOrderByCreatedAtDesc(Long userId);
+    java.util.Optional<NotificationEntity> findByIdAndUserId(Long id, Long userId);
 }
