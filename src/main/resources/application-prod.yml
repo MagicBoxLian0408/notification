@@ -46,7 +46,7 @@ spring:
           general-goods-updated:kr.magicbox.notification.adapter.in.kafka.event.GeneralGoodsUpdatedEvent
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       topic:
         backoff:
           multiplier: 2
