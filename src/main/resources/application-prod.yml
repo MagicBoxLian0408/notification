@@ -17,7 +17,6 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
         spring.json.trusted.packages: "kr.magicbox.notification.adapter.in.kafka.event"
         spring.json.type.mapping: >
-        spring.json.use.type.headers: false
           user-signup:kr.magicbox.notification.adapter.in.kafka.event.UserSignupEvent,
           user-banned:kr.magicbox.notification.adapter.in.kafka.event.UserBannedEvent,
           user-unbanned:kr.magicbox.notification.adapter.in.kafka.event.UserUnbannedEvent,
