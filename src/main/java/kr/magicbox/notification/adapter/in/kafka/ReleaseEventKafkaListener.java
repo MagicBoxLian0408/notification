@@ -5,9 +5,7 @@ import kr.magicbox.notification.adapter.in.kafka.event.ReleaseCreatedEvent;
 import kr.magicbox.notification.adapter.in.kafka.event.ReleaseUpdatedEvent;
 import kr.magicbox.notification.adapter.in.kafka.event.StockReserveFailedEvent;
 import kr.magicbox.notification.adapter.in.kafka.event.StockReserveSucceededEvent;
-import kr.magicbox.notification.adapter.out.persistence.entity.NotificationInboxEntity;
 import kr.magicbox.notification.adapter.out.persistence.entity.NotificationTemplateEntity;
-import kr.magicbox.notification.adapter.out.persistence.repository.NotificationInboxJpaRepository;
 import kr.magicbox.notification.adapter.out.persistence.repository.NotificationTemplateJpaRepository;
 import kr.magicbox.notification.application.dto.command.SaveNotificationCommand;
 import kr.magicbox.notification.application.port.in.SaveNotificationUseCase;
@@ -17,7 +15,6 @@ import kr.magicbox.notification.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.retrytopic.DltStrategy;
@@ -29,7 +26,6 @@ import org.springframework.stereotype.Component;
 public class ReleaseEventKafkaListener {
 
     private final SaveNotificationUseCase saveNotificationUseCase;
-    private final NotificationInboxJpaRepository notificationInboxJpaRepository;
     private final NotificationTemplateJpaRepository notificationTemplateJpaRepository;
     private final FcmTopicPort fcmTopicPort;
 
@@ -73,10 +69,4 @@ public class ReleaseEventKafkaListener {
         saveNotificationUseCase.save(SaveNotificationCommand.of(event.customerId(), NotificationType.STOCK_RESERVE_FAILED));
     }
 
-    @DltHandler
-    public void handleDlt(ConsumerRecord<String, ?> consumerRecord) {
-        log.error("[Inbox] DLT 전환. topic={}, partition={}, offset={}", consumerRecord.topic(), consumerRecord.partition(), consumerRecord.offset());
-        notificationInboxJpaRepository.findByTopicAndPartitionAndOffset(consumerRecord.topic(), consumerRecord.partition(), consumerRecord.offset())
-                .ifPresent(NotificationInboxEntity::markDeadLettered);
-    }
 }
