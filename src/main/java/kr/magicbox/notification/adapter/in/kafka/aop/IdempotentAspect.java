@@ -31,9 +31,7 @@ public class IdempotentAspect {
     @Around("@annotation(kr.magicbox.notification.adapter.in.kafka.annotation.Idempotent)")
     public Object around(ProceedingJoinPoint pjp) {
         ConsumerRecord<String, ?> consumerRecord = extractRecord(pjp);
-        String key = consumerRecord.key() != null
-                ? consumerRecord.key()
-                : consumerRecord.topic() + "-" + consumerRecord.partition() + "-" + consumerRecord.offset();
+        String key = consumerRecord.key();
         InboxEvent event = (InboxEvent) consumerRecord.value();
         Instant occurredAt = event.occurredAt();
 
@@ -57,26 +55,20 @@ public class IdempotentAspect {
                 log.warn("[Inbox] 중복 메시지 폐기. key={}", key);
                 return null;
             }
-            NotificationInboxEntity inbox = notificationInboxJpaRepository.save(NotificationInboxEntity.builder()
+            notificationInboxJpaRepository.save(NotificationInboxEntity.builder()
                     .key(key)
                     .topic(consumerRecord.topic())
                     .partition(consumerRecord.partition())
                     .offset(consumerRecord.offset())
-                    .status(NotificationInboxStatus.PENDING)
+                    .status(NotificationInboxStatus.PROCESSED)
                     .occurredAt(occurredAt)
                     .build());
             try {
                 pjp.proceed();
-            } catch (Error e) {
-                throw e;
-            } catch (RuntimeException e) {
-                status.setRollbackOnly();
-                throw e;
             } catch (Throwable e) {
                 status.setRollbackOnly();
-                throw new IllegalStateException(e);
+                throw new RuntimeException(e);
             }
-            inbox.markProcessed();
             return null;
         });
     }
@@ -91,6 +83,6 @@ public class IdempotentAspect {
                 .filter(ConsumerRecord.class::isInstance)
                 .map(arg -> (ConsumerRecord<String, ?>) arg)
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("@Idempotent 메서드에 ConsumerRecord 파라미터가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("@Idempotent 메서드에 ConsumerRecord 파라미터가 없습니다."));
     }
 }
